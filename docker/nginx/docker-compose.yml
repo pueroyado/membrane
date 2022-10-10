@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: app-nginx
+    hostname: app-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./html/index.html:/var/www/app/index.html
+      - ./conf.d:/etc/nginx/conf.d
+      - ./logs:/var/log/nginx
+    networks:
+      local-net:
+    restart: always
+
+networks:
+  local-net:
+    driver: bridge
+    name: "app-net"
