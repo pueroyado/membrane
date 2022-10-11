@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: app-nginx
+    hostname: app-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/html/index.html:/var/www/app/index.html
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./docker/nginx/logs:/var/log/nginx
+    depends_on:
+      - go
+    networks:
+      local-net:
+    restart: always
+
+  go:
+    build:
+      context: ./
+      dockerfile: ./docker/go/Dockerfile
+    container_name: app-go
+    hostname: app-go
+    networks:
+      local-net:
+
+networks:
+  local-net:
+    driver: bridge
+    name: "app-net"

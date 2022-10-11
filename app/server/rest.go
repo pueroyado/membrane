@@ -40,13 +40,21 @@ func (s *APIServer) Shutdown(mainCtx context.Context) error {
 
 func (s *APIServer) RouterConf() http.Handler {
 	r := mux.NewRouter()
-	r.HandleFunc("/", s.handleInfo()).Methods(http.MethodGet)
+	r.HandleFunc("/", s.handleHome()).Methods(http.MethodGet)
+	r.HandleFunc("/info", s.handleInfo()).Methods(http.MethodGet)
 
 	return r
 }
 
-func (s *APIServer) handleInfo() http.HandlerFunc {
+func (s *APIServer) handleHome() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(w, "handleInfo")
+	}
+}
+func (s *APIServer) handleInfo() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		name := r.URL.Query().Get("name")
+		fmt.Fprintln(w, "Hello guy!", name)
 	}
 }
