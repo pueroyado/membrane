@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"demo/server"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -11,6 +12,8 @@ import (
 )
 
 func main() {
+	fmt.Println("Start fn main")
+
 	serverApi := server.Create()
 	wg := sync.WaitGroup{}
 	ctx := context.Background()

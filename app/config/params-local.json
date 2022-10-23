@@ -1,0 +1,10 @@
+{
+  "secret_key" : "12344321",
+  "api_key" : "123321",
+  "mysql": {
+    "user" : "root",
+    "password" : "secret",
+    "host" : "localhost:3306",
+    "db": "demo"
+  }
+}
