@@ -17,7 +17,6 @@ services:
             - "./dump:/var/www/dump"
         networks:
             - local-net
-        restart: always
 
 networks:
     local-net:
