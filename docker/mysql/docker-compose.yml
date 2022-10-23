@@ -12,16 +12,9 @@ services:
             - MYSQL_USER=mysql
             - MYSQL_PASSWORD=mysql
             - MYSQL_ROOT_PASSWORD=secret
-        volumes:
-            - "demo_mysql_volume:/var/lib/mysql"
-            - "./dump:/var/www/dump"
         networks:
             - local-net
 
 networks:
     local-net:
         external: true
-
-volumes:
-    demo_mysql_volume:
-        name: "demo_mysql_volume"
