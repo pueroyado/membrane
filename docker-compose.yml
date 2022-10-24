@@ -38,6 +38,8 @@ services:
       - MYSQL_USER=demo_user
       - MYSQL_PASSWORD=demo_pass
       - MYSQL_ROOT_PASSWORD=demo_secret
+    volumes:
+        - "./data:/var/lib/mysql"
     networks:
       local-net:
 
