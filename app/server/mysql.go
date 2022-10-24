@@ -13,8 +13,8 @@ func NewMysqlConnect() *sqlx.DB {
 
 	str := "%s:%s@tcp(%s)/%s"
 	connectionString := fmt.Sprintf(str,
-		"mysql",
-		"mysql",
+		"demo_user",
+		"demo_pass",
 		"app-mysql:3306",
 		"demo",
 	)

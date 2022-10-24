@@ -35,9 +35,9 @@ services:
       - "3306:3306"
     environment:
       - MYSQL_DATABASE=demo
-      - MYSQL_USER=mysql
-      - MYSQL_PASSWORD=mysql
-      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_USER=demo_user
+      - MYSQL_PASSWORD=demo_pass
+      - MYSQL_ROOT_PASSWORD=demo_secret
     networks:
       local-net:
 
