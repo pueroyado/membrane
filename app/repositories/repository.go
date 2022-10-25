@@ -34,9 +34,11 @@ func (r *ProductRepo) Search(
 		"LEFT JOIN product_property ON p_prop_product_id = p_id "
 
 	if category != "" {
-		rowSql += "WHERE p_category = 1"
+		rowSql += "WHERE p_category = " + category + " "
 	}
-
+	if limit != "" && offset != "" {
+		rowSql += "LIMIT " + offset + "," + limit + " "
+	}
 	rows, err := r.db.Query(rowSql)
 	if err != nil {
 		log.Fatalln(err)

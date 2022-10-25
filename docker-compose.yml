@@ -39,7 +39,7 @@ services:
       - MYSQL_PASSWORD=demo_pass
       - MYSQL_ROOT_PASSWORD=demo_secret
     volumes:
-        - "./data:/var/lib/mysql"
+        - "demo_mysql_volume:/var/lib/mysql"
     networks:
       local-net:
 
@@ -47,3 +47,7 @@ networks:
   local-net:
     driver: bridge
     name: "local-net"
+
+volumes:
+  demo_mysql_volume:
+    name: "demo_mysql_volume"

@@ -45,6 +45,7 @@ func (s *APIServer) Shutdown(mainCtx context.Context) error {
 
 func (s *APIServer) Router() http.Handler {
 	r := mux.NewRouter()
+
 	r.HandleFunc("/", s.handleHome()).Methods(http.MethodGet)
 
 	productRepo := repositories.NewProductRepo(s.dbMysql)
