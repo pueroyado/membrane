@@ -25,5 +25,6 @@ type Product struct {
 }
 
 type ProductRepository interface {
-	Search(limit string, offset string, category string) ([]*Product, error)
+	FindAll(limit string, offset string, category string) ([]*Product, error)
+	FindOne(productId int32) (*Product, error)
 }

@@ -16,7 +16,7 @@ func NewProductRepo(db *sqlx.DB) *ProductRepo {
 	}
 }
 
-func (r *ProductRepo) Search(
+func (r *ProductRepo) FindAll(
 	limit string,
 	offset string,
 	category string,
@@ -69,4 +69,42 @@ func (r *ProductRepo) Search(
 		products = append(products, &p)
 	}
 	return products, nil
+}
+
+func (r *ProductRepo) FindOne(productId int32) (*models.Product, error) {
+	rowSql := "SELECT " +
+		"p_id, p_name, p_description, p_brand, p_preview, p_price, " +
+		"p_cat_id, p_cat_name, " +
+		"p_prop_barcode, " +
+		"p_prop_weight, " +
+		"p_prop_height, " +
+		"p_prop_color, " +
+		"p_prop_vat " +
+		"from product " +
+		"LEFT JOIN product_category ON p_cat_id = p_category " +
+		"LEFT JOIN product_property ON p_prop_product_id = p_id " +
+		"WHERE p_id = ?"
+	res := r.db.QueryRow(rowSql, productId)
+
+	p := &models.Product{}
+	err := res.Scan(
+		&p.Id,
+		&p.Name,
+		&p.Description,
+		&p.Brand,
+		&p.Preview,
+		&p.Price,
+		&p.Category.Id,
+		&p.Category.Name,
+		&p.Property.Barcode,
+		&p.Property.Weight,
+		&p.Property.Height,
+		&p.Property.Color,
+		&p.Property.Vat,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return p, nil
 }

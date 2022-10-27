@@ -51,9 +51,7 @@ func (s *APIServer) Router() http.Handler {
 	productRepo := repositories.NewProductRepo(s.dbMysql)
 	handlerProduct := product.NewHandlerProduct(productRepo)
 	r.HandleFunc("/product", handlerProduct.List()).Methods(http.MethodGet)
-	r.HandleFunc("/product", product.Create()).Methods(http.MethodPost)
-	r.HandleFunc("/product", product.Delete()).Methods(http.MethodDelete)
-	r.HandleFunc("/product", product.Update()).Methods(http.MethodPatch)
+	r.HandleFunc("/product/{id:[0-9]+}", handlerProduct.Detail()).Methods(http.MethodGet)
 
 	return r
 }
