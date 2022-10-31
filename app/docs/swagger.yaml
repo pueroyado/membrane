@@ -1,0 +1,114 @@
+basePath: /
+definitions:
+  models.Category:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Error:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  models.Product:
+    properties:
+      brand:
+        type: string
+      category:
+        $ref: '#/definitions/models.Category'
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      preview:
+        type: string
+      price:
+        type: integer
+      property:
+        $ref: '#/definitions/models.Property'
+    type: object
+  models.Property:
+    properties:
+      barcode:
+        type: string
+      color:
+        type: string
+      height:
+        type: integer
+      vat:
+        type: string
+      weight:
+        type: integer
+    type: object
+host: localhost
+info:
+  contact: {}
+  description: This is a service product
+  title: Product API
+  version: "1.0"
+paths:
+  /product:
+    get:
+      consumes:
+      - application/json
+      description: Получение списка продуктов с возможным применением фильтров
+      parameters:
+      - description: category id
+        enum:
+        - 1
+        - 2
+        in: query
+        name: category
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+        "404":
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Product list
+      tags:
+      - Product
+  /product/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Получение детальной информации по товару
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/models.Product'
+        "404":
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/models.Error'
+      summary: Product detail
+      tags:
+      - Product
+swagger: "2.0"
