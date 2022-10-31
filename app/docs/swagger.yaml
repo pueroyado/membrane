@@ -48,7 +48,7 @@ definitions:
       weight:
         type: integer
     type: object
-host: localhost
+host: http://188.225.77.14
 info:
   contact: {}
   description: This is a service product
