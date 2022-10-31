@@ -21,18 +21,18 @@ func (r *ProductRepo) FindAll(
 	offset string,
 	category string,
 ) ([]*models.Product, error) {
-	var queryParams []string
+	//var queryParams []string
 	rowSql := r.getBaseSelect()
 
 	if category != "" {
-		rowSql += "WHERE p_category = ? "
-		queryParams = append(queryParams, category)
+		rowSql += "WHERE p_category = " + category
+		// queryParams = append(queryParams, category)
 	}
 	if limit != "" && offset != "" {
-		rowSql += "LIMIT ?,? "
-		queryParams = append(queryParams, offset, limit)
+		rowSql += "LIMIT " + offset + "," + limit + " "
+		// queryParams = append(queryParams, offset, limit)
 	}
-	rows, err := r.db.Query(rowSql, queryParams)
+	rows, err := r.db.Query(rowSql)
 	if err != nil {
 		log.Fatalln(err)
 	}

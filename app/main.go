@@ -11,6 +11,11 @@ import (
 	"syscall"
 )
 
+// @title Product API
+// @version 1.0
+// @description This is a service product
+// @host localhost
+// @BasePath /
 func main() {
 	fmt.Println("Start fn main")
 

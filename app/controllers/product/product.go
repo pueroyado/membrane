@@ -18,6 +18,19 @@ func NewHandlerProduct(productRepo models.ProductRepository) *HandlerProduct {
 	}
 }
 
+// List @BasePath /api
+// @Tags Product
+// @Summary Product list
+// @Produce json
+// @Accept json
+// @Schemes
+// @Description Получение списка продуктов с возможным применением фильтров
+// @Param category query int false "category id" Enums(1,2)
+// @Param offset query int false "offset"
+// @Param limit query int false "limit"
+// @Success 200 {array} models.Product "Successful operation"
+// @Failure 404 {object} models.Error "Unexpected error"
+// @Router /product [get]
 func (hp *HandlerProduct) List() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
@@ -32,6 +45,17 @@ func (hp *HandlerProduct) List() http.HandlerFunc {
 		w.Write(byteData)
 	}
 }
+
+// Detail @BasePath /api
+// @Tags Product
+// @Summary Product detail
+// @Schemes
+// @Description Получение детальной информации по товару
+// @Produce json
+// @Accept json
+// @Success 200 {object} models.Product "Successful operation"
+// @Failure 404 {object} models.Error "Unexpected error"
+// @Router /product/{id} [get]
 func (hp *HandlerProduct) Detail() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 

@@ -3,9 +3,11 @@ package server
 import (
 	"context"
 	"demo/controllers/product"
+	_ "demo/docs"
 	"demo/repositories"
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"net/http"
 	"time"
 
@@ -48,6 +50,10 @@ func (s *APIServer) Router() http.Handler {
 
 	r.HandleFunc("/", s.handleHome()).Methods(http.MethodGet)
 
+	//r.HandleFunc("/swagger", httpSwagger.WrapHandler)
+	//r.HandleFunc("/swagger", s.handleSwagger()).Methods(http.MethodGet)
+	r.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
+
 	productRepo := repositories.NewProductRepo(s.dbMysql)
 	handlerProduct := product.NewHandlerProduct(productRepo)
 	r.HandleFunc("/product", handlerProduct.List()).Methods(http.MethodGet)
@@ -59,5 +65,11 @@ func (s *APIServer) Router() http.Handler {
 func (s *APIServer) handleHome() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "This is home page!")
+	}
+}
+
+func (s *APIServer) handleSwagger() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "This is swagger page!")
 	}
 }
