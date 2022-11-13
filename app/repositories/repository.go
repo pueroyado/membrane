@@ -110,28 +110,28 @@ func (r *ProductRepo) FindOne(productId int32) (*models.Product, error) {
 func (r *ProductRepo) getBaseSelect() string {
 	sqlBase := "SELECT " +
 		"p_id, p_name, p_description, p_brand, p_image, p_price, p_quantity, p_sku, p_barcode, " +
-		"p_cat_id AS `category.id`, p_cat_name AS `category.name`, " +
-		"package_id AS `package.id`, " +
-		"package_type AS `package.type`, " +
-		"package_material AS `package.material`, " +
-		"package_weight AS `package.weight`, " +
-		"package_length AS `package.length`, " +
-		"package_width AS `package.width`, " +
-		"package_height AS `package.height`, " +
-		"package_price AS `package.price` " +
+		"p_category_id AS `category.id`, p_category_name AS `category.name`, " +
+		"p_package_id AS `package.id`, " +
+		"p_package_type AS `package.type`, " +
+		"p_package_material AS `package.material`, " +
+		"p_package_weight AS `package.weight`, " +
+		"p_package_length AS `package.length`, " +
+		"p_package_width AS `package.width`, " +
+		"p_package_height AS `package.height`, " +
+		"p_package_price AS `package.price` " +
 		"FROM p_product " +
-		"LEFT JOIN p_category ON p_cat_id = p_category_id " +
-		"LEFT JOIN p_package ON package_id = p_package_id "
+		"LEFT JOIN p_category ON p_category_id = p_category " +
+		"LEFT JOIN p_package ON p_package_id = p_package "
 
 	return sqlBase
 }
 
 func (r *ProductRepo) getGalleryImage(ids []int) map[int32][]*string {
 	sqlGallery := "SELECT " +
-		"p_gallery_image_url, p_gallery_product_id " +
-		"FROM p_gallery " +
-		"WHERE p_gallery_product_id IN (?) " +
-		"order by p_gallery_position ASC "
+		"p_gallery_image_link, p_gallery_image_product_id " +
+		"FROM p_gallery_image " +
+		"WHERE p_gallery_image_product_id IN (?) " +
+		"order by p_gallery_image_position ASC "
 
 	q, args, _ := sqlx.In(sqlGallery, ids)
 	rows, err := r.db.Queryx(q, args...)
