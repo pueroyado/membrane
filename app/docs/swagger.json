@@ -110,9 +110,6 @@
         "models.Error": {
             "type": "object",
             "properties": {
-                "code": {
-                    "type": "integer"
-                },
                 "message": {
                     "type": "string"
                 },
@@ -121,9 +118,41 @@
                 }
             }
         },
+        "models.Package": {
+            "type": "object",
+            "properties": {
+                "height": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "length": {
+                    "type": "integer"
+                },
+                "material": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "weight": {
+                    "type": "integer"
+                },
+                "width": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.Product": {
             "type": "object",
             "properties": {
+                "barcode": {
+                    "type": "string"
+                },
                 "brand": {
                     "type": "string"
                 },
@@ -133,40 +162,61 @@
                 "description": {
                     "type": "string"
                 },
+                "gallery": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "id": {
                     "type": "integer"
+                },
+                "image": {
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
                 },
-                "preview": {
-                    "type": "string"
+                "package": {
+                    "$ref": "#/definitions/models.Package"
                 },
                 "price": {
                     "type": "integer"
                 },
                 "property": {
-                    "$ref": "#/definitions/models.Property"
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "$ref": "#/definitions/models.Property"
+                        }
+                    }
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "set": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "sku": {
+                    "type": "string"
                 }
             }
         },
         "models.Property": {
             "type": "object",
             "properties": {
-                "barcode": {
+                "measure": {
                     "type": "string"
                 },
-                "color": {
+                "name": {
                     "type": "string"
                 },
-                "height": {
-                    "type": "integer"
-                },
-                "vat": {
+                "value": {
                     "type": "string"
-                },
-                "weight": {
-                    "type": "integer"
                 }
             }
         }

@@ -2,6 +2,7 @@ package product
 
 import (
 	"demo/models"
+	"demo/utils"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -63,13 +64,13 @@ func (hp *HandlerProduct) Detail() http.HandlerFunc {
 		vars := mux.Vars(r)
 
 		productId, err := strconv.Atoi(vars["id"])
-		if err != nil || productId < 0 {
-			http.Error(w, "Bad Request", http.StatusBadRequest)
+		if err != nil || productId <= 0 {
+			utils.ErrorMessage(w, http.StatusBadRequest, "Bad Request, detail: "+err.Error())
 			return
 		}
 		product, error := hp.productRepo.FindOne(int32(productId))
 		if error != nil {
-			http.Error(w, "Product not found, detail: "+error.Error(), http.StatusNotFound)
+			utils.ErrorMessage(w, http.StatusNotFound, "Product not found, detail: "+error.Error())
 			return
 		}
 

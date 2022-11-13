@@ -5,6 +5,7 @@ import (
 	"demo/controllers/product"
 	_ "demo/docs"
 	"demo/repositories"
+	"demo/utils"
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	httpSwagger "github.com/swaggo/http-swagger"
@@ -49,15 +50,15 @@ func (s *APIServer) Router() http.Handler {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", s.handleHome()).Methods(http.MethodGet)
-
-	//r.HandleFunc("/swagger", httpSwagger.WrapHandler)
-	//r.HandleFunc("/swagger", s.handleSwagger()).Methods(http.MethodGet)
 	r.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
+
+	secure := r.PathPrefix("/api").Subrouter()
+	secure.Use(utils.JwtVerify)
 
 	productRepo := repositories.NewProductRepo(s.dbMysql)
 	handlerProduct := product.NewHandlerProduct(productRepo)
-	r.HandleFunc("/product", handlerProduct.List()).Methods(http.MethodGet)
-	r.HandleFunc("/product/{id:[0-9]+}", handlerProduct.Detail()).Methods(http.MethodGet)
+	secure.HandleFunc("/product", handlerProduct.List()).Methods(http.MethodGet)
+	secure.HandleFunc("/product/{id:[0-9]+}", handlerProduct.Detail()).Methods(http.MethodGet)
 
 	return r
 }
@@ -65,11 +66,5 @@ func (s *APIServer) Router() http.Handler {
 func (s *APIServer) handleHome() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "This is home page!")
-	}
-}
-
-func (s *APIServer) handleSwagger() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "This is swagger page!")
 	}
 }

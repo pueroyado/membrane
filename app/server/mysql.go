@@ -15,6 +15,7 @@ func NewMysqlConnect() *sqlx.DB {
 	connectionString := fmt.Sprintf(str,
 		"demo_user",
 		"demo_pass",
+		//"localhost:3306",
 		"app-mysql:3306",
 		"demo",
 	)

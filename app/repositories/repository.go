@@ -25,7 +25,7 @@ func (r *ProductRepo) FindAll(
 	rowSql := r.getBaseSelect()
 
 	if category != "" {
-		rowSql += "WHERE p_category = " + category
+		rowSql += "WHERE p_category_id = " + category
 		// queryParams = append(queryParams, category)
 	}
 	if limit != "" && offset != "" {
@@ -39,69 +39,172 @@ func (r *ProductRepo) FindAll(
 	defer rows.Close()
 
 	var products []*models.Product
+	var ids []int
 	for rows.Next() {
 		p := models.Product{}
 		err := rows.Scan(
-			&p.Id,
-			&p.Name,
-			&p.Description,
-			&p.Brand,
-			&p.Preview,
-			&p.Price,
+			&p.Id, &p.Name, &p.Description, &p.Brand, &p.Image, &p.Price, &p.Quantity, &p.Sku, &p.Barcode,
 			&p.Category.Id,
 			&p.Category.Name,
-			&p.Property.Barcode,
-			&p.Property.Weight,
-			&p.Property.Height,
-			&p.Property.Color,
-			&p.Property.Vat,
+			&p.Package.Id, &p.Package.Type, &p.Package.Material, &p.Package.Weight, &p.Package.Length, &p.Package.Width,
+			&p.Package.Height, &p.Package.Price,
 		)
 		if err != nil {
 			log.Fatalln(err)
 		}
+		ids = append(ids, int(p.Id))
 		products = append(products, &p)
 	}
+
+	sets := r.getSet(ids)
+	properties := r.getProperties(ids)
+	gallery := r.getGalleryImage(ids)
+
+	for _, product := range products {
+		product.Set = sets[product.Id]
+		product.Property = properties[product.Id]
+		product.Gallery = gallery[product.Id]
+	}
+
 	return products, nil
 }
 
 func (r *ProductRepo) FindOne(productId int32) (*models.Product, error) {
 	rowSql := r.getBaseSelect()
-	rowSql += "WHERE p_id = ? "
+	rowSql += "WHERE p_id = ? " +
+		"ORDER BY p_id "
 
 	p := &models.Product{}
-	row := r.db.QueryRow(rowSql, productId)
-	err := row.Scan(
-		&p.Id,
-		&p.Name,
-		&p.Description,
-		&p.Brand,
-		&p.Preview,
-		&p.Price,
-		&p.Category.Id,
-		&p.Category.Name,
-		&p.Property.Barcode,
-		&p.Property.Weight,
-		&p.Property.Height,
-		&p.Property.Color,
-		&p.Property.Vat,
-	)
+	row := r.db.QueryRowx(rowSql, productId)
+	err := row.StructScan(p)
 	if err != nil {
 		return nil, err
+	}
+
+	ids := []int{int(p.Id)}
+	sets := r.getSet(ids)
+	p.Set = sets[productId]
+	if p.Set == nil {
+		p.Set = make([]*string, 0)
+	}
+
+	galleryImage := r.getGalleryImage(ids)
+	galleryImageProduct := galleryImage[productId]
+	if galleryImageProduct == nil {
+		p.Gallery = make([]*string, 0)
+	} else {
+		p.Gallery = galleryImageProduct
+	}
+
+	properties := r.getProperties(ids)
+	propertiesProductId := properties[productId]
+	if propertiesProductId == nil {
+		p.Property = make([]*map[string]models.Property, 0)
+	} else {
+		p.Property = properties[productId]
 	}
 
 	return p, nil
 }
 
 func (r *ProductRepo) getBaseSelect() string {
-	return "SELECT " +
-		"p_id, p_name, p_description, p_brand, p_preview, p_price, " +
-		"p_cat_id, p_cat_name, " +
-		"p_prop_barcode, " +
-		"p_prop_weight, " +
-		"p_prop_height, " +
-		"p_prop_color, " +
-		"p_prop_vat " +
-		"from product " +
-		"LEFT JOIN product_category ON p_cat_id = p_category " +
-		"LEFT JOIN product_property ON p_prop_product_id = p_id "
+	sqlBase := "SELECT " +
+		"p_id, p_name, p_description, p_brand, p_image, p_price, p_quantity, p_sku, p_barcode, " +
+		"p_cat_id AS `category.id`, p_cat_name AS `category.name`, " +
+		"package_id AS `package.id`, " +
+		"package_type AS `package.type`, " +
+		"package_material AS `package.material`, " +
+		"package_weight AS `package.weight`, " +
+		"package_length AS `package.length`, " +
+		"package_width AS `package.width`, " +
+		"package_height AS `package.height`, " +
+		"package_price AS `package.price` " +
+		"FROM p_product " +
+		"LEFT JOIN p_category ON p_cat_id = p_category_id " +
+		"LEFT JOIN p_package ON package_id = p_package_id "
+
+	return sqlBase
+}
+
+func (r *ProductRepo) getGalleryImage(ids []int) map[int32][]*string {
+	sqlGallery := "SELECT " +
+		"p_gallery_image_url, p_gallery_product_id " +
+		"FROM p_gallery " +
+		"WHERE p_gallery_product_id IN (?) " +
+		"order by p_gallery_position ASC "
+
+	q, args, _ := sqlx.In(sqlGallery, ids)
+	rows, err := r.db.Queryx(q, args...)
+	if err != nil {
+		log.Println("error get galleryImage query", err.Error())
+	}
+	defer rows.Close()
+
+	gallery := make(map[int32][]*string)
+	for rows.Next() {
+		var productId int32
+		var imageUrl string
+		rows.Scan(&imageUrl, &productId)
+		gallery[productId] = append(gallery[productId], &imageUrl)
+	}
+	return gallery
+}
+
+func (r *ProductRepo) getSet(ids []int) map[int32][]*string {
+	sqlSet := "SELECT " +
+		"p_set_name, p_set_product_product_id " +
+		"FROM p_set_product " +
+		"LEFT JOIN p_set ps ON ps.p_set_id = p_set_product_set_id " +
+		"WHERE " +
+		"p_set_product_product_id IN (?) " +
+		"AND p_set_status = 1"
+
+	q, args, _ := sqlx.In(sqlSet, ids)
+	rows, err := r.db.Queryx(q, args...)
+	if err != nil {
+		log.Println("error get set query", err.Error())
+	}
+	defer rows.Close()
+
+	sets := make(map[int32][]*string)
+	for rows.Next() {
+		var productId int32
+		var setName string
+		rows.Scan(&setName, &productId)
+		sets[productId] = append(sets[productId], &setName)
+	}
+	return sets
+}
+
+func (r *ProductRepo) getProperties(ids []int) map[int32][]*map[string]models.Property {
+	sqlProperty := "SELECT " +
+		"p_property_product_product_id, " +
+		"p_property_code, p_property_name, p_property_value_value, p_property_measure " +
+		"FROM p_property_product " +
+		"LEFT JOIN p_property ON p_property_id = p_property_product_property_id " +
+		"LEFT JOIN p_property_value ON p_property_value_property_product_id = p_property_product_id " +
+		"WHERE p_property_product_product_id IN (?);"
+
+	q, args, _ := sqlx.In(sqlProperty, ids)
+	rows, err := r.db.Queryx(q, args...)
+	if err != nil {
+		log.Println("error get property query", err)
+	}
+	defer rows.Close()
+
+	props := make(map[int32][]*map[string]models.Property)
+	for rows.Next() {
+		var productId int32
+		var productFieldCode, name, value, measure string
+		rows.Scan(&productId, &productFieldCode, &name, &value, &measure)
+
+		prop := make(map[string]models.Property)
+		prop[productFieldCode] = models.Property{
+			Name:    name,
+			Value:   value,
+			Measure: measure,
+		}
+		props[productId] = append(props[productId], &prop)
+	}
+	return props
 }
