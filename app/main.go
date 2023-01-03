@@ -11,10 +11,10 @@ import (
 	"syscall"
 )
 
-// @title Product API
-// @version 1.0
+// @title Skalka API
+// @version 1.2.0
 // @description This is a service product
-// @host http://188.225.77.14
+// @host localhost
 // @BasePath /
 func main() {
 	fmt.Println("Start fn main")

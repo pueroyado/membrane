@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"demo/controllers/product"
+	"demo/controllers"
 	_ "demo/docs"
 	"demo/repositories"
 	"demo/utils"
@@ -52,11 +52,16 @@ func (s *APIServer) Router() http.Handler {
 	r.HandleFunc("/", s.handleHome()).Methods(http.MethodGet)
 	r.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 
+	userRepo := repositories.NewUserRepo(s.dbMysql)
+	userHandler := controllers.NewHandlerUser(userRepo)
+	r.HandleFunc("/user/reg", userHandler.Reg()).Methods(http.MethodPost)
+	r.HandleFunc("/user/auth", userHandler.Auth()).Methods(http.MethodPost)
+
 	secure := r.PathPrefix("/api").Subrouter()
 	secure.Use(utils.JwtVerify)
 
 	productRepo := repositories.NewProductRepo(s.dbMysql)
-	handlerProduct := product.NewHandlerProduct(productRepo)
+	handlerProduct := controllers.NewHandlerProduct(productRepo)
 	secure.HandleFunc("/product", handlerProduct.List()).Methods(http.MethodGet)
 	secure.HandleFunc("/product/{id:[0-9]+}", handlerProduct.Detail()).Methods(http.MethodGet)
 

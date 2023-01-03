@@ -1,4 +1,4 @@
-package product
+package controllers
 
 import (
 	"demo/models"
@@ -68,9 +68,9 @@ func (hp *HandlerProduct) Detail() http.HandlerFunc {
 			utils.ErrorMessage(w, http.StatusBadRequest, "Bad Request, detail: "+err.Error())
 			return
 		}
-		product, error := hp.productRepo.FindOne(int32(productId))
-		if error != nil {
-			utils.ErrorMessage(w, http.StatusNotFound, "Product not found, detail: "+error.Error())
+		product, errFind := hp.productRepo.FindOne(int32(productId))
+		if errFind != nil {
+			utils.ErrorMessage(w, http.StatusNotFound, "Product not found, detail: "+errFind.Error())
 			return
 		}
 

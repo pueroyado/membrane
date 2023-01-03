@@ -2,13 +2,58 @@
     "swagger": "2.0",
     "info": {
         "description": "This is a service product",
-        "title": "Product API",
+        "title": "Skalka API",
         "contact": {},
-        "version": "1.0"
+        "version": "1.2.0"
     },
-    "host": "http://188.225.77.14",
+    "host": "localhost",
     "basePath": "/",
     "paths": {
+        "/auth": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User auth",
+                "parameters": [
+                    {
+                        "description": "john@mail.ru",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "secret",
+                        "name": "password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.JwtPayload"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/product": {
             "get": {
                 "description": "Получение списка продуктов с возможным применением фильтров",
@@ -93,6 +138,51 @@
                     }
                 }
             }
+        },
+        "/reg": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User registration",
+                "parameters": [
+                    {
+                        "description": "john@mail.ru",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "secret",
+                        "name": "password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.JwtPayload"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -114,6 +204,17 @@
                     "type": "string"
                 },
                 "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.JwtPayload": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "tokenExp": {
                     "type": "integer"
                 }
             }

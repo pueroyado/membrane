@@ -16,6 +16,51 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User auth",
+                "parameters": [
+                    {
+                        "description": "john@mail.ru",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "secret",
+                        "name": "password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.JwtPayload"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/product": {
             "get": {
                 "description": "Получение списка продуктов с возможным применением фильтров",
@@ -100,6 +145,51 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/reg": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User registration",
+                "parameters": [
+                    {
+                        "description": "john@mail.ru",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "secret",
+                        "name": "password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.JwtPayload"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -121,6 +211,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.JwtPayload": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "tokenExp": {
                     "type": "integer"
                 }
             }
@@ -232,11 +333,11 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
-	Host:             "http://188.225.77.14",
+	Version:          "1.2.0",
+	Host:             "localhost",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Product API",
+	Title:            "Skalka API",
 	Description:      "This is a service product",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
