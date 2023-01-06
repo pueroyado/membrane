@@ -19,7 +19,7 @@ func NewHandlerProduct(productRepo models.ProductRepository) *HandlerProduct {
 	}
 }
 
-// List @BasePath /api
+// List @BasePath /
 // @Tags Product
 // @Summary Product list
 // @Produce json
@@ -47,7 +47,7 @@ func (hp *HandlerProduct) List() http.HandlerFunc {
 	}
 }
 
-// Detail @BasePath /api
+// Detail @BasePath /
 // @Tags Product
 // @Summary Product detail
 // @Schemes

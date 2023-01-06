@@ -54,7 +54,7 @@ func (a *AuthRequest) Validate() error {
 // @Param email body string true "john@mail.ru"
 // @Param password body string true "secret"
 // @Success 200 {array} models.JwtPayload "Successful operation"
-// @Router /reg [post]
+// @Router /user/reg [post]
 func (h *HandlerUser) Reg() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		regRequest := RegRequest{}
@@ -88,7 +88,7 @@ func (h *HandlerUser) Reg() http.HandlerFunc {
 // @Param email body string true "john@mail.ru"
 // @Param password body string true "secret"
 // @Success 200 {array} models.JwtPayload "Successful operation"
-// @Router /auth [post]
+// @Router /user/auth [post]
 func (h *HandlerUser) Auth() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		authRequest := AuthRequest{}

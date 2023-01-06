@@ -95,35 +95,6 @@ info:
   title: Skalka API
   version: 1.2.0
 paths:
-  /auth:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: john@mail.ru
-        in: body
-        name: email
-        required: true
-        schema:
-          type: string
-      - description: secret
-        in: body
-        name: password
-        required: true
-        schema:
-          type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Successful operation
-          schema:
-            items:
-              $ref: '#/definitions/models.JwtPayload'
-            type: array
-      summary: User auth
-      tags:
-      - User
   /product:
     get:
       consumes:
@@ -180,7 +151,36 @@ paths:
       summary: Product detail
       tags:
       - Product
-  /reg:
+  /user/auth:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: john@mail.ru
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: secret
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            items:
+              $ref: '#/definitions/models.JwtPayload'
+            type: array
+      summary: User auth
+      tags:
+      - User
+  /user/reg:
     post:
       consumes:
       - application/json
