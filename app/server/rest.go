@@ -65,6 +65,7 @@ func (s *APIServer) Router() http.Handler {
 	secure.HandleFunc("/product", handlerProduct.List()).Methods(http.MethodGet)
 	secure.HandleFunc("/product/{id:[0-9]+}", handlerProduct.Detail()).Methods(http.MethodGet)
 
+	r.Headers("Access-Control-Allow-Origin *")
 	return r
 }
 
