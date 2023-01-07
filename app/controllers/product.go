@@ -34,7 +34,6 @@ func NewHandlerProduct(productRepo models.ProductRepository) *HandlerProduct {
 // @Router /product [get]
 func (hp *HandlerProduct) List() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Content-Type", "application/json")
 		vars := r.URL.Query()
 		products, _ := hp.productRepo.FindAll(
@@ -60,7 +59,6 @@ func (hp *HandlerProduct) List() http.HandlerFunc {
 // @Router /product/{id} [get]
 func (hp *HandlerProduct) Detail() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Content-Type", "application/json")
 		vars := mux.Vars(r)
 
