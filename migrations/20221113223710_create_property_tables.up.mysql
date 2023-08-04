@@ -1,0 +1,41 @@
+CREATE TABLE `p_property` (
+  `p_property_id` int NOT NULL AUTO_INCREMENT,
+  `p_property_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `p_property_name` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `p_property_measure` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`p_property_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO demo.p_property (p_property_code, p_property_name, p_property_measure) VALUES('materialType', 'Тип материала', NULL);
+INSERT INTO demo.p_property (p_property_code, p_property_name, p_property_measure) VALUES('materialBrand', 'Материал изготовления', NULL);
+INSERT INTO demo.p_property (p_property_code, p_property_name, p_property_measure) VALUES('texture', 'Текстура (Мат, Глянец, Комби)', NULL);
+INSERT INTO demo.p_property (p_property_code, p_property_name, p_property_measure) VALUES('carModel', 'Модель Авто', NULL);
+INSERT INTO demo.p_property (p_property_code, p_property_name, p_property_measure) VALUES('carBrand', 'Марка Авто', NULL);
+INSERT INTO demo.p_property (p_property_code, p_property_name, p_property_measure) VALUES('width', 'Ширина', 'см');
+
+CREATE TABLE `p_property_product` (
+  `p_property_product_id` int NOT NULL AUTO_INCREMENT,
+  `p_property_product_product_id` int DEFAULT NULL,
+  `p_property_product_property_id` int DEFAULT NULL,
+  PRIMARY KEY (`p_property_product_id`),
+  KEY `p_property_product_product_id_IDX` (`p_property_product_product_id`) USING BTREE,
+  KEY `p_property_product_property_id_IDX` (`p_property_product_property_id`) USING BTREE,
+  CONSTRAINT `p_property_product_id_FK` FOREIGN KEY (`p_property_product_product_id`) REFERENCES `p_product` (`p_id`) ON DELETE CASCADE,
+  CONSTRAINT `p_property_property_id_FK` FOREIGN KEY (`p_property_product_property_id`) REFERENCES `p_property` (`p_property_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO demo.p_property_product (p_property_product_product_id, p_property_product_property_id) VALUES(1, 1);
+INSERT INTO demo.p_property_product (p_property_product_product_id, p_property_product_property_id) VALUES(1, 2);
+INSERT INTO demo.p_property_product (p_property_product_product_id, p_property_product_property_id) VALUES(2, 5);
+INSERT INTO demo.p_property_product (p_property_product_product_id, p_property_product_property_id) VALUES(2, 6);
+
+CREATE TABLE `p_property_value` (
+  `p_property_value_id` int NOT NULL AUTO_INCREMENT,
+  `p_property_value_property_product_id` int DEFAULT NULL,
+  `p_property_value_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`p_property_value_id`),
+  KEY `p_property_value_property_product_id_IDX` (`p_property_value_property_product_id`) USING BTREE,
+  CONSTRAINT `p_property_value_pp_id_FK` FOREIGN KEY (`p_property_value_property_product_id`) REFERENCES `p_property_product` (`p_property_product_id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO demo.p_property_value (p_property_value_property_product_id, p_property_value_value) VALUES(4, '200');

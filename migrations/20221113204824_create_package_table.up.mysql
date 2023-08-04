@@ -1,0 +1,25 @@
+CREATE TABLE `p_package` (
+  `p_package_id` int NOT NULL AUTO_INCREMENT,
+  `p_package_type` varchar(100) DEFAULT NULL,
+  `p_package_material` varchar(100) DEFAULT NULL,
+  `p_package_weight` int DEFAULT NULL,
+  `p_package_length` int DEFAULT NULL,
+  `p_package_width` int DEFAULT NULL,
+  `p_package_height` int DEFAULT NULL,
+  `p_package_price` int DEFAULT NULL,
+  PRIMARY KEY (`p_package_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO p_package
+    (
+        p_package_type,
+        p_package_material,
+        p_package_weight,
+        p_package_length,
+        p_package_width,
+        p_package_height,
+        p_package_price
+    )
+VALUES
+	 ('коробка','дерево',10,10,10,10,100),
+	 ('пакет','пластик',5,5,5,5,50);

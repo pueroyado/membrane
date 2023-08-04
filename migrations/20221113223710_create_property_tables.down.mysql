@@ -1,0 +1,8 @@
+ALTER TABLE p_property_value DROP FOREIGN KEY p_property_value_pp_id_FK;
+DROP TABLE `p_property_value`;
+
+ALTER TABLE p_property_product DROP FOREIGN KEY p_property_product_id_FK;
+ALTER TABLE p_property_product DROP FOREIGN KEY p_property_property_id_FK;
+DROP TABLE `p_property_product`;
+
+DROP TABLE `p_property`;

@@ -1,0 +1,17 @@
+CREATE TABLE `p_gallery_image` (
+  `p_gallery_image_id` int NOT NULL AUTO_INCREMENT,
+  `p_gallery_image_link` varchar(500) DEFAULT NULL,
+  `p_gallery_image_product_id` int DEFAULT NULL,
+  `p_gallery_image_position` int DEFAULT '1',
+  PRIMARY KEY (`p_gallery_image_id`),
+  KEY `p_gallery_image_product_FK` (`p_gallery_image_product_id`),
+  CONSTRAINT `p_gallery_image_product_FK` FOREIGN KEY (`p_gallery_image_product_id`) REFERENCES `p_product` (`p_id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO p_gallery_image (
+        p_gallery_image_link, p_gallery_image_product_id, p_gallery_image_position
+    )
+VALUES
+    ('https://api.ggmgastro.com/img/600/900/resize/media/catalog/product/6/3/636846193075655172_4e82.jpg', 1, 1),
+    ('https://api.ggmgastro.com/img/600/900/resize/media/catalog/product/6/3/636846193075655172_4e82.jpg', 1, 2),
+    ('https://api.ggmgastro.com/img/600/900/resize/media/catalog/product/6/3/636846193075655172_4e82.jpg', 2, 1);

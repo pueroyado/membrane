@@ -1,0 +1,11 @@
+CREATE TABLE `p_category` (
+  `p_category_id` int NOT NULL AUTO_INCREMENT,
+  `p_category_name` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`p_category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO p_category
+    (p_category_name)
+VALUES
+	 ('авто'),
+	 ('мото');

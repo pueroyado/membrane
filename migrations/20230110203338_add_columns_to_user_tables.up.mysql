@@ -1,0 +1,7 @@
+ALTER TABLE `user` ADD user_nickname varchar(50) NULL;
+ALTER TABLE `user` ADD user_name varchar(50) NULL;
+ALTER TABLE `user` ADD user_surname varchar(50) NULL;
+ALTER TABLE `user` ADD user_patronymic varchar(50) NULL;
+ALTER TABLE `user` ADD user_phone varchar(20) NULL;
+ALTER TABLE `user` ADD user_role varchar(20) NULL;
+ALTER TABLE `user` ADD user_birthday DATETIME NULL;

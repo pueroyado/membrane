@@ -1,0 +1,30 @@
+CREATE TABLE `p_product` (
+  `p_id` int NOT NULL AUTO_INCREMENT,
+  `p_name` varchar(100) DEFAULT NULL,
+  `p_description` varchar(500) DEFAULT NULL,
+  `p_brand` varchar(100) DEFAULT NULL,
+  `p_price` int DEFAULT NULL,
+  `p_image` varchar(500) DEFAULT NULL,
+  `p_sku` varchar(50) DEFAULT NULL,
+  `p_quantity` int DEFAULT NULL,
+  `p_barcode` varchar(100) DEFAULT NULL,
+  `p_category` int DEFAULT NULL,
+  `p_package` int DEFAULT NULL,
+  PRIMARY KEY (`p_id`),
+  KEY `p_product_category_id_IDX` (`p_category`) USING BTREE,
+  KEY `p_product_package_id_IDX` (`p_package`) USING BTREE,
+  CONSTRAINT `p_product_category_id_FK` FOREIGN KEY (`p_category`) REFERENCES `p_category` (`p_category_id`) ON DELETE SET NULL,
+  CONSTRAINT `p_product_package_id_FK` FOREIGN KEY (`p_package`) REFERENCES `p_package` (`p_package_id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO p_product (
+    p_name, p_description,
+    p_brand, p_price,
+    p_image, p_sku,
+    p_quantity, p_barcode,
+    p_category, p_package)
+VALUES
+    ('суши', 'вкусная суша', 'oli', 100, 'https://img1.goodfon.ru/original/800x480/b/57/fastfud-picca-krupnym-planom.jpg', 'zx11', 10, 'ERT12', 1, 1),
+    ('пицца', 'вкусная пицца', 'oli', 150, 'https://img1.goodfon.ru/original/800x480/b/57/fastfud-picca-krupnym-planom.jpg', 'cx22', 10, 'ERT12', 2, 2);
+
+

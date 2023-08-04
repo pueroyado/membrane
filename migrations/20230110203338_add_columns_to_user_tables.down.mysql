@@ -1,0 +1,8 @@
+ALTER TABLE `user`
+  DROP COLUMN user_nickname,
+  DROP COLUMN user_name;
+  DROP COLUMN user_surname;
+  DROP COLUMN user_patronymic;
+  DROP COLUMN user_phone;
+  DROP COLUMN user_role;
+  DROP COLUMN user_birthday;

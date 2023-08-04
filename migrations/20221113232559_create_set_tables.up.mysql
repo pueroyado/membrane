@@ -1,0 +1,30 @@
+CREATE TABLE `p_set` (
+  `p_set_id` int NOT NULL AUTO_INCREMENT,
+  `p_set_name` varchar(200) DEFAULT NULL,
+  `p_set_status` smallint DEFAULT NULL,
+  PRIMARY KEY (`p_set_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO demo.p_set (p_set_name, p_set_status) VALUES('дисплей', 1);
+INSERT INTO demo.p_set (p_set_name, p_set_status) VALUES('приборка', 1);
+INSERT INTO demo.p_set (p_set_name, p_set_status) VALUES('консоль', 1);
+INSERT INTO demo.p_set (p_set_name, p_set_status) VALUES('подстаканники', 1);
+
+
+CREATE TABLE `p_set_product` (
+  `p_set_product` int NOT NULL AUTO_INCREMENT,
+  `p_set_product_product_id` int DEFAULT NULL,
+  `p_set_product_set_id` int DEFAULT NULL,
+  PRIMARY KEY (`p_set_product`),
+  KEY `p_set_product_set_id_IDX` (`p_set_product_set_id`) USING BTREE,
+  KEY `p_set_product_product_id_IDX` (`p_set_product_product_id`) USING BTREE,
+  CONSTRAINT `p_set_product_product_id_FK` FOREIGN KEY (`p_set_product_product_id`) REFERENCES `p_product` (`p_id`) ON DELETE CASCADE,
+  CONSTRAINT `p_set_product_set_id_FK` FOREIGN KEY (`p_set_product_set_id`) REFERENCES `p_set` (`p_set_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO demo.p_set_product (p_set_product_product_id, p_set_product_set_id) VALUES(1, 1);
+INSERT INTO demo.p_set_product (p_set_product_product_id, p_set_product_set_id) VALUES(1, 2);
+INSERT INTO demo.p_set_product (p_set_product_product_id, p_set_product_set_id) VALUES(2, 3);
+INSERT INTO demo.p_set_product (p_set_product_product_id, p_set_product_set_id) VALUES(2, 4);
+
+

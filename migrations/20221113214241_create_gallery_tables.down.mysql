@@ -1,0 +1,3 @@
+ALTER TABLE p_gallery_image DROP FOREIGN KEY p_gallery_image_product_FK;
+
+DROP TABLE `p_gallery_image`;
